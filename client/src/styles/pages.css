@@ -1,0 +1,41 @@
+/* ==========================================================================
+   AuraMatch AI — Page-Level Styles & Utilities (Vanilla CSS)
+   ========================================================================== */
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  line-height: 1.1;
+}
+
+.page-desc {
+  font-size: 0.96rem;
+  color: var(--color-secondary-text);
+  margin-top: 6px;
+  max-width: 640px;
+}
+
+/* Responsive Grids */
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .directory-grid {
+    grid-template-columns: 1fr;
+  }
+}

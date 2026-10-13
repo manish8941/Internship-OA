@@ -17,7 +17,40 @@ function resolveDbPath(): string {
   if (process.env.NODE_ENV === 'test' && !process.env.DATABASE_URL) {
     return 'file:./data/test_dating_platform.db';
   }
-  return process.env.DATABASE_URL || 'file:./data/dating_platform.db';
+
+  if (process.env.DATABASE_URL || process.env.TURSO_DATABASE_URL) {
+    return (process.env.DATABASE_URL || process.env.TURSO_DATABASE_URL)!;
+  }
+
+  // Support Vercel serverless environment with writable /tmp directory
+  if (process.env.VERCEL) {
+    const tmpDbPath = path.join('/tmp', 'dating_platform.db');
+    if (!fs.existsSync(tmpDbPath)) {
+      const candidates = [
+        path.join(process.cwd(), 'data', 'dating_platform.db'),
+        path.resolve('data/dating_platform.db'),
+      ];
+      let copied = false;
+      for (const src of candidates) {
+        if (fs.existsSync(src)) {
+          try {
+            fs.copyFileSync(src, tmpDbPath);
+            copied = true;
+            console.log(`[Vercel DB] Initialized /tmp database from ${src}`);
+            break;
+          } catch (e) {
+            console.warn(`[Vercel DB] Copy error from ${src}:`, e);
+          }
+        }
+      }
+      if (!copied) {
+        console.warn('[Vercel DB] Source database not found. Fresh database will be created in /tmp');
+      }
+    }
+    return `file:${tmpDbPath}`;
+  }
+
+  return 'file:./data/dating_platform.db';
 }
 
 function ensureDbDirectory(dbUrl: string): void {
@@ -30,22 +63,31 @@ function ensureDbDirectory(dbUrl: string): void {
   }
 }
 
+function getAuthToken(): string | undefined {
+  return process.env.TURSO_AUTH_TOKEN || process.env.DATABASE_AUTH_TOKEN;
+}
+
 let currentDbPath = resolveDbPath();
 ensureDbDirectory(currentDbPath);
 
 export let db: Client = createClient({
   url: currentDbPath,
+  authToken: getAuthToken(),
 });
 
 export function switchDatabase(newUrl: string): void {
   ensureDbDirectory(newUrl);
   currentDbPath = newUrl;
-  db = createClient({ url: newUrl });
+  db = createClient({
+    url: newUrl,
+    authToken: getAuthToken(),
+  });
 }
 
 export async function initDatabase(customUrl?: string): Promise<void> {
-  if (customUrl && customUrl !== currentDbPath) {
-    switchDatabase(customUrl);
+  const targetUrl = customUrl || resolveDbPath();
+  if (targetUrl !== currentDbPath) {
+    switchDatabase(targetUrl);
   }
   await db.execute('PRAGMA foreign_keys = ON;');
   await db.execute('PRAGMA journal_mode = WAL;');

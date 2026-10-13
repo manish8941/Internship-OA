@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Agentic Dating Platform - Multi-turn Autonomous AI Dating & Compatibility Engine",
   "main": "server/src/index.ts",
+  "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "tsx watch server/src/index.ts",

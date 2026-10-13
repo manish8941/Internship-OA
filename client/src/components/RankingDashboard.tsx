@@ -152,13 +152,12 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({
           {/* Ranked Candidates List (Arca Editorial Cards) */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             {rankingData.rankedCandidates.map((cand, index) => {
-              const score = cand.compatibilityScore;
-              const isMatch = score.mutualInterestIndicator === 'MUTUAL_MATCH';
-              const isOneWay = score.mutualInterestIndicator === 'ONE_WAY_INTEREST';
+              const isMatch = cand.mutualInterestIndicator === 'MUTUAL_MATCH';
+              const isOneWay = cand.mutualInterestIndicator === 'ONE_WAY_INTEREST';
 
               return (
                 <div
-                  key={cand.candidate.id}
+                  key={cand.candidateId}
                   className="glass-panel"
                   style={{
                     padding: '28px 32px',
@@ -190,23 +189,23 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({
                         #{index + 1}
                       </div>
 
-                      <MonogramAvatar name={cand.candidate.name} size={54} status="fixture" />
+                      <MonogramAvatar name={cand.candidateName} size={54} status="fixture" />
 
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <h3 className="editorial-title" style={{ fontSize: '1.35rem', color: 'var(--color-ink)' }}>
-                            {cand.candidate.name}
+                            {cand.candidateName}
                           </h3>
                           <span
                             className={`badge ${
                               isMatch ? 'badge-sage' : isOneWay ? 'badge-lavender' : 'badge-neutral'
                             }`}
                           >
-                            {score.mutualInterestIndicator.replace(/_/g, ' ')}
+                            {cand.mutualInterestIndicator.replace(/_/g, ' ')}
                           </span>
                         </div>
                         <p style={{ fontSize: '0.82rem', color: 'var(--color-secondary-text)', marginTop: '2px' }}>
-                          {cand.candidate.bioHeadline || 'Public Profile'}
+                          {cand.candidateHeadline || 'Public Profile'}
                         </p>
                       </div>
                     </div>
@@ -214,7 +213,7 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({
                     {/* Overall Score Badge */}
                     <div style={{ textAlign: 'right' }}>
                       <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2.4rem', fontWeight: 500, color: 'var(--color-ink)', lineHeight: 1 }}>
-                        {score.overallScore}
+                        {cand.overallScore}
                         <span style={{ fontSize: '1rem', color: 'var(--color-muted-text)', fontFamily: 'var(--font-sans)' }}>/100</span>
                       </div>
                       <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--color-secondary-text)', textTransform: 'uppercase' }}>
@@ -238,64 +237,64 @@ export const RankingDashboard: React.FC<RankingDashboardProps> = ({
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '4px' }}>
                         <span>Shared Interests</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{score.breakdown.sharedInterestsScore}/30</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{cand.breakdown.sharedInterestsScore}/30</span>
                       </div>
                       <div style={{ height: '4px', background: 'rgba(32, 33, 31, 0.08)', borderRadius: '9999px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${(score.breakdown.sharedInterestsScore / 30) * 100}%`, background: 'var(--color-periwinkle)' }} />
+                        <div style={{ height: '100%', width: `${(cand.breakdown.sharedInterestsScore / 30) * 100}%`, background: 'var(--color-periwinkle)' }} />
                       </div>
                     </div>
 
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '4px' }}>
                         <span>Preference Alignment</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{score.breakdown.preferenceAlignmentScore}/25</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{cand.breakdown.preferenceAlignmentScore}/25</span>
                       </div>
                       <div style={{ height: '4px', background: 'rgba(32, 33, 31, 0.08)', borderRadius: '9999px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${(score.breakdown.preferenceAlignmentScore / 25) * 100}%`, background: 'var(--color-lavender)' }} />
+                        <div style={{ height: '100%', width: `${(cand.breakdown.preferenceAlignmentScore / 25) * 100}%`, background: 'var(--color-lavender)' }} />
                       </div>
                     </div>
 
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '4px' }}>
                         <span>Complementary Goals</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{score.breakdown.complementaryGoalsScore}/20</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{cand.breakdown.complementaryGoalsScore}/20</span>
                       </div>
                       <div style={{ height: '4px', background: 'rgba(32, 33, 31, 0.08)', borderRadius: '9999px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${(score.breakdown.complementaryGoalsScore / 20) * 100}%`, background: 'var(--color-coral)' }} />
+                        <div style={{ height: '100%', width: `${(cand.breakdown.complementaryGoalsScore / 20) * 100}%`, background: 'var(--color-coral)' }} />
                       </div>
                     </div>
 
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '4px' }}>
                         <span>Conversation Quality</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{score.breakdown.conversationQualityScore}/15</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{cand.breakdown.conversationQualityScore}/15</span>
                       </div>
                       <div style={{ height: '4px', background: 'rgba(32, 33, 31, 0.08)', borderRadius: '9999px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${(score.breakdown.conversationQualityScore / 15) * 100}%`, background: 'var(--color-sage-dark)' }} />
+                        <div style={{ height: '100%', width: `${(cand.breakdown.conversationQualityScore / 15) * 100}%`, background: 'var(--color-sage-dark)' }} />
                       </div>
                     </div>
 
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', marginBottom: '4px' }}>
                         <span>Data Confidence</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{score.breakdown.dataConfidenceScore}/10</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{cand.breakdown.dataConfidenceScore}/10</span>
                       </div>
                       <div style={{ height: '4px', background: 'rgba(32, 33, 31, 0.08)', borderRadius: '9999px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${(score.breakdown.dataConfidenceScore / 10) * 100}%`, background: 'var(--color-ink)' }} />
+                        <div style={{ height: '100%', width: `${(cand.breakdown.dataConfidenceScore / 10) * 100}%`, background: 'var(--color-ink)' }} />
                       </div>
                     </div>
                   </div>
 
                   {/* Qualitative Explanation from Backend */}
                   <div style={{ fontSize: '0.88rem', color: 'var(--color-ink-subtle)', lineHeight: 1.6 }}>
-                    <strong>Qualitative Analysis:</strong> {score.explanation}
+                    <strong>Qualitative Analysis:</strong> {cand.explanation}
                   </div>
 
                   {/* Frictions or Disclaimers */}
-                  {score.potentialFrictions && score.potentialFrictions.length > 0 && (
+                  {(cand as any).potentialFrictions && (cand as any).potentialFrictions.length > 0 && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: 'var(--color-secondary-text)' }}>
                       <AlertCircle size={13} color="var(--color-coral)" />
-                      <span>{score.potentialFrictions[0]}</span>
+                      <span>{(cand as any).potentialFrictions[0]}</span>
                     </div>
                   )}
 

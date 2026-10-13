@@ -155,9 +155,34 @@ $$\text{Total Score} = \text{Interests (30)} + \text{Preferences (25)} + \text{G
 
 ---
 
+## ☁️ Vercel Deployment
+
+AuraMatch AI is fully configured for deployment on **Vercel**:
+
+### Deployment Architecture
+- **Frontend**: Vite compiles static assets to `dist/client`, delivered globally via Vercel Edge CDN with Single-Page Application (SPA) routing.
+- **Backend API**: Express application wrapped as a Vercel Serverless Function (`api/index.ts`), mapped cleanly to `/api/*` via `vercel.json`.
+- **Database on Serverless**:
+  - **Zero-Config Out-of-the-Box**: Automatically initializes the pre-populated 25-participant SQLite database in `/tmp/dating_platform.db` on cold-start with full read/write capabilities and auto-seeding. Anyone can test immediately!
+  - **Optional Cloud Persistence**: Connect a [Turso](https://turso.tech) database by adding `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` to your Vercel Environment Variables.
+
+### Deploy in 2 Minutes:
+1. **Import to Vercel**:
+   - Go to [vercel.com/new](https://vercel.com/new).
+   - Select and import `https://github.com/manish8941/Internship-OA`.
+2. **Build Configuration**:
+   - Framework Preset: **Vite**
+   - Build Command: `npm run build`
+   - Output Directory: `dist/client`
+3. **Deploy**:
+   - Click **Deploy**. The application and all API endpoints will be live immediately!
+
+---
+
 ## 🔒 Platform Access Compliance & Limitations
 
 - **Platform Access Controls**: Both LinkedIn and Instagram restrict unauthenticated automated crawlers using login walls or HTTP 401/429 checkpoints. The platform strictly obeys these boundaries and never bypasses authentication or CAPTCHAs.
 - **Fixture Provenance**: When platform walls are encountered or in demo mode, verified public profile snapshots are used and transparently marked as `fixture_snapshot` in the audit logs.
 - **No Private Data**: Private accounts, direct messages, and non-public data are never accessed.
 - **No Hallucinated Intent**: Romantic intentions are not assumed or fabricated without explicit public evidence.
+

@@ -203,7 +203,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <MonogramAvatar name={p.name} size={48} status="fixture" showStatusDot />
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.05rem', fontWeight: 500, truncate: true }}>
+                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.05rem', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {p.name}
                     </div>
                     <div

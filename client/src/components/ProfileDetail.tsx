@@ -36,7 +36,7 @@ export const ProfileDetail: React.FC<ProfileDetailProps> = ({
   onSimulateDate,
   onViewRankings,
 }) => {
-  const { participant, profile, evidences, recentConversations = [] } = data;
+  const { participant, profile, evidences, conversations: recentConversations = [] } = data;
 
   const liEv = evidences.find((e) => e.source === 'linkedin');
   const igEv = evidences.find((e) => e.source === 'instagram');
@@ -269,7 +269,7 @@ export const ProfileDetail: React.FC<ProfileDetailProps> = ({
                   "{fact.fact}"
                 </div>
                 <div style={{ fontSize: '0.74rem', color: 'var(--color-secondary-text)', marginTop: '6px' }}>
-                  Anchor: {fact.anchor}
+                  Signal: {fact.quoteOrSignal}
                 </div>
               </div>
             ))}
@@ -303,7 +303,7 @@ export const ProfileDetail: React.FC<ProfileDetailProps> = ({
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <span className="badge badge-lavender" style={{ fontSize: '0.66rem' }}>
-                    {hyp.category.toUpperCase()}
+                    INFERRED PATTERN
                   </span>
                   <span className="badge badge-neutral" style={{ fontSize: '0.66rem' }}>
                     {hyp.confidence} CONFIDENCE
